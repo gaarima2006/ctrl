@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CashFlow Copilot — Intelligent Treasury & Runway Engine</title>
   
-  <!-- Inter Font -->
+  <!-- Inter & Mono Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -54,6 +54,14 @@
   <script type="text/babel">
     const { useState, useMemo, useEffect, useRef } = React;
 
+    const Coins = (p) => (
+      <IconBase {...p}>
+        <circle cx="8" cy="8" r="6" />
+        <path d="M18.09 10.37A6 6 0 1 1 10.34 18" />
+        <path d="M7 6h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7" />
+      </IconBase>
+    );
+
     // SVG Icon system
     const IconBase = ({ children, className = "w-4 h-4", fill = "none", stroke = "currentColor", ...props }) => (
       <svg
@@ -74,7 +82,20 @@
     const Sparkles = (p) => <IconBase {...p}><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></IconBase>;
     const AlertTriangle = (p) => <IconBase {...p}><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></IconBase>;
     const ShieldCheck = (p) => <IconBase {...p}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></IconBase>;
-    const DollarSign = (p) => <IconBase {...p}><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></IconBase>;
+    const RupeeSign = (p) => (
+      <IconBase {...p}>
+        <path d="M6 3h12" />
+        <path d="M6 8h12" />
+        <path d="m6 13 8.5 8" />
+        <path d="M6 13h3a4 4 0 0 0 0-8" />
+      </IconBase>
+    );
+    const DollarSign = (p) => (
+      <IconBase {...p}>
+        <line x1="12" y1="1" x2="12" y2="23" />
+        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+      </IconBase>
+    );
     const Clock = (p) => <IconBase {...p}><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></IconBase>;
     const ArrowUpRight = (p) => <IconBase {...p}><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></IconBase>;
     const ArrowDownRight = (p) => <IconBase {...p}><line x1="7" y1="7" x2="17" y2="17"/><polyline points="17 7 17 17 7 17"/></IconBase>;
@@ -115,6 +136,41 @@
     const Building = (p) => <IconBase {...p}><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></IconBase>;
     const CreditCard = (p) => <IconBase {...p}><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></IconBase>;
     const FileSpreadsheet = (p) => <IconBase {...p}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M8 13h2"/><path d="M14 13h2"/><path d="M8 17h2"/><path d="M14 17h2"/></IconBase>;
+
+    const Mic = (p) => (
+      <IconBase {...p}>
+        <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+        <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+        <line x1="12" x2="12" y1="19" y2="22" />
+      </IconBase>
+    );
+    const MicOff = (p) => (
+      <IconBase {...p}>
+        <line x1="2" x2="22" y1="2" y2="22" />
+        <path d="M18.89 13.23A7.12 7.12 0 0 0 19 12v-2" />
+        <path d="M5 10v2a7 7 0 0 0 12 5" />
+        <path d="M15 9.34V5a3 3 0 0 0-5.68-1.33" />
+        <path d="M9 9v3a3 3 0 0 0 5.12 2.12" />
+        <line x1="12" x2="12" y1="19" y2="22" />
+      </IconBase>
+    );
+
+    const Camera = (p) => <IconBase {...p}><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></IconBase>;
+    const Scan = (p) => <IconBase {...p}><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/></IconBase>;
+    const GoogleDriveIcon = (p) => (
+      <svg viewBox="0 0 24 24" className={p.className || "w-4 h-4"} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9 3.5 3 14l3.5 6.5L16 20.5 22 10 15.5 3.5z" />
+        <path d="m3 14 9.5 0" />
+        <path d="m9 3.5 6.5 11" />
+      </svg>
+    );
+
+    const DRIVE_FILES = [
+      { id: 'drive-1', name: 'AWS_Cloud_Invoice_Oct.pdf', size: '1.2 MB', date: 'Yesterday', amount: 4200, category: 'Vendor', type: 'payable' },
+      { id: 'drive-2', name: 'Office_Lease_Agreement_Q4.pdf', size: '3.4 MB', date: '3 days ago', amount: 6500, category: 'Rent', type: 'payable' },
+      { id: 'drive-3', name: 'Acme_Enterprise_PO_Signed.pdf', size: '840 KB', date: 'Oct 12', amount: 32000, category: 'Revenue', type: 'receivable' },
+      { id: 'drive-4', name: 'GST_Q3_Advance_Notice.pdf', size: '512 KB', date: 'Oct 08', amount: 12400, category: 'Tax', type: 'payable' }
+    ];
 
     const PRESETS = {
       agencyCrunch: {
@@ -180,62 +236,142 @@
       { id: 'ledger', stepNumber: 6, label: 'Ledger', fullTitle: 'Cash Ledger', icon: FileText, desc: 'Inflows & Payables' },
     ];
 
-    const formatCurrency = (val) => {
-      return new Intl.NumberFormat('en-US', {
+    const formatCurrencyWithRegion = (val, region = 'IN') => {
+      if (region === 'US') {
+        return new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: 'USD',
+          maximumFractionDigits: 0
+        }).format(val || 0);
+      }
+      return new Intl.NumberFormat('en-IN', {
         style: 'currency',
-        currency: 'USD',
+        currency: 'INR',
         maximumFractionDigits: 0
       }).format(val || 0);
     };
 
+    const cleanNumber = (val) => {
+      if (typeof val === 'number') return val;
+      if (!val) return 0;
+      const cleaned = val.toString().replace(/[^0-9.-]+/g, '');
+      const num = parseFloat(cleaned);
+      return isNaN(num) ? 0 : num;
+    };
+
     const parseCSVText = (text) => {
-      const lines = text.trim().split(/\r\n|\n/);
+      const lines = text.trim().split(/\r\n|\n/).filter(line => line.trim().length > 0);
       if (lines.length < 2) return { success: false, message: 'CSV requires a header row and at least one data row.' };
 
-      const headers = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/['"]/g, ''));
+      // Split header while honoring quotes
+      const splitRow = (row) => {
+        const matches = [];
+        let cur = '';
+        let inQuotes = false;
+        for (let i = 0; i < row.length; i++) {
+          const char = row[i];
+          if (char === '"') {
+            inQuotes = !inQuotes;
+          } else if (char === ',' && !inQuotes) {
+            matches.push(cur.trim().replace(/^["']|["']$/g, ''));
+            cur = '';
+          } else {
+            cur += char;
+          }
+        }
+        matches.push(cur.trim().replace(/^["']|["']$/g, ''));
+        return matches;
+      };
+
+      const headers = splitRow(lines[0]).map(h => h.toLowerCase().replace(/[^a-z0-9]/g, ''));
       const parsedInvoices = [];
       const parsedExpenses = [];
       let detectedCash = null;
 
       for (let i = 1; i < lines.length; i++) {
-        const row = lines[i].split(',').map(c => c.trim().replace(/^["']|["']$/g, ''));
-        if (row.length < 2 || !row.some(Boolean)) continue;
+        const rawCells = splitRow(lines[i]);
+        if (rawCells.length < 2 || !rawCells.some(Boolean)) continue;
 
-        const rowObj = {};
+        const row = {};
         headers.forEach((h, idx) => {
-          rowObj[h] = row[idx] !== undefined ? row[idx] : '';
+          row[h] = rawCells[idx] !== undefined ? rawCells[idx] : '';
         });
 
-        const type = (rowObj.type || rowObj.category || (parseFloat(rowObj.amount) < 0 ? 'expense' : 'income')).toLowerCase();
-        const amount = Math.abs(parseFloat(rowObj.amount || rowObj.value || 0));
-        const title = rowObj.title || rowObj.name || rowObj.description || rowObj.client || `Item #${i}`;
-        const day = parseInt(rowObj.day || rowObj.duedate || rowObj.date || '15', 10) || 15;
+        // Determine title
+        const title = row.title || row.name || row.description || row.desc || row.client || row.particulars || row.vendor || `Item #${i}`;
 
-        if (rowObj.type === 'balance' || title.toLowerCase().includes('opening cash')) {
-          detectedCash = amount;
+        // Detect day or date
+        let day = 15;
+        const rawDate = row.day || row.duedate || row.date || row.transactiondate || '';
+        if (rawDate) {
+          const numDay = parseInt(rawDate, 10);
+          if (!isNaN(numDay) && numDay >= 1 && numDay <= 90 && !rawDate.includes('/') && !rawDate.includes('-')) {
+            day = numDay;
+          } else {
+            // Attempt to parse calendar date (e.g. 2026-10-15 or 15/10/2026)
+            const parsed = new Date(rawDate);
+            if (!isNaN(parsed.getTime())) {
+              const diffDays = Math.ceil((parsed - new Date()) / (1000 * 60 * 60 * 24));
+              day = Math.min(Math.max(1, diffDays > 0 ? diffDays : Math.abs(diffDays % 90) + 1), 90);
+            }
+          }
+        }
+
+        // Detect Opening Cash
+        const lowerTitle = title.toLowerCase();
+        const rawType = (row.type || row.category || '').toLowerCase();
+        if (rawType.includes('balance') || lowerTitle.includes('opening cash') || lowerTitle.includes('starting cash') || lowerTitle.includes('initial cash')) {
+          detectedCash = cleanNumber(row.amount || row.balance || row.value || 0);
           continue;
         }
 
-        if (type.includes('invoice') || type.includes('income') || type.includes('receivable') || type.includes('revenue')) {
+        // Amount detection with bank debit/credit columns
+        const creditAmt = cleanNumber(row.credit || row.deposit || row.inflow || 0);
+        const debitAmt = cleanNumber(row.debit || row.withdrawal || row.outflow || 0);
+        const genericAmt = cleanNumber(row.amount || row.value || row.total || 0);
+
+        let isIncome = false;
+        let finalAmount = 0;
+
+        if (creditAmt > 0) {
+          isIncome = true;
+          finalAmount = creditAmt;
+        } else if (debitAmt > 0) {
+          isIncome = false;
+          finalAmount = debitAmt;
+        } else {
+          finalAmount = Math.abs(genericAmt);
+          if (genericAmt > 0) {
+            isIncome = rawType.includes('income') || rawType.includes('invoice') || rawType.includes('receivable') || rawType.includes('revenue') || rawType.includes('sale') || lowerTitle.includes('client');
+          } else if (genericAmt < 0) {
+            isIncome = false;
+          } else {
+            isIncome = rawType.includes('income') || rawType.includes('invoice') || rawType.includes('receivable');
+          }
+        }
+
+        if (finalAmount <= 0) continue;
+
+        if (isIncome) {
           parsedInvoices.push({
             id: `csv-inv-${Date.now()}-${i}`,
             client: title,
-            amount: isNaN(amount) ? 1000 : amount,
-            dueDate: Math.min(Math.max(1, day), 90),
-            confidence: (rowObj.confidence || 'medium').toLowerCase(),
+            amount: finalAmount,
+            dueDate: day,
+            confidence: (row.confidence || 'high').toLowerCase(),
             status: 'pending',
             delayDays: 0,
-            contactName: title.split(' ')[0] || 'Partner',
-            email: 'billing@client.com'
+            contactName: title.split(' ')[0] || 'Client',
+            email: row.email || 'billing@partner.com'
           });
         } else {
           parsedExpenses.push({
             id: `csv-exp-${Date.now()}-${i}`,
             title: title,
-            amount: isNaN(amount) ? 500 : amount,
-            dueDayOfInterval: [Math.min(Math.max(1, day), 90)],
-            category: (rowObj.category || 'Vendor'),
-            essential: !['marketing', 'discretionary', 'capex', 'office perks'].some(k => (rowObj.category || '').toLowerCase().includes(k)),
+            amount: finalAmount,
+            dueDayOfInterval: [day],
+            category: row.category || (lowerTitle.includes('salary') || lowerTitle.includes('payroll') ? 'Payroll' : lowerTitle.includes('tax') || lowerTitle.includes('gst') ? 'Tax' : lowerTitle.includes('rent') ? 'Rent' : 'Vendor'),
+            essential: !['marketing', 'discretionary', 'capex', 'office perks', 'party'].some(k => (row.category || '').toLowerCase().includes(k) || lowerTitle.includes(k)),
             delayedDays: 0
           });
         }
@@ -260,6 +396,80 @@
         return true;
       });
 
+      // Region State: 'IN' (India - ₹ INR) or 'US' (United States - $ USD)
+      const [region, setRegion] = useState(() => {
+        if (typeof window !== 'undefined') {
+          return localStorage.getItem('cashflow_region') || 'IN';
+        }
+        return 'IN';
+      });
+
+      // Market Exchange Rate (1 USD to INR, default 95.75)
+      const [exchangeRate, setExchangeRate] = useState(() => {
+        if (typeof window !== 'undefined') {
+          const saved = localStorage.getItem('cashflow_exchange_rate');
+          return saved ? parseFloat(saved) : 95.75;
+        }
+        return 95.75;
+      });
+
+      const [isEditingRate, setIsEditingRate] = useState(false);
+      const [tempRateInput, setTempRateInput] = useState('95.75');
+
+      const formatCurrency = (val) => formatCurrencyWithRegion(val, region);
+
+      const handleRegionChange = (newReg) => {
+        if (newReg === region) return;
+
+        const rate = exchangeRate > 0 ? exchangeRate : 95.75;
+        // If moving US -> IN: multiply by 95.75. If moving IN -> US: divide by 95.75
+        const multiplier = newReg === 'IN' ? rate : (1 / rate);
+
+        pushHistorySnapshot(`Currency converted to ${newReg === 'IN' ? 'INR (₹)' : 'USD ($)'}`);
+
+        // Recalculate all underlying values in real-time
+        setCurrentCash(prev => Math.round(prev * multiplier));
+
+        setInvoices(prev => prev.map(inv => ({
+          ...inv,
+          amount: Math.round(inv.amount * multiplier)
+        })));
+
+        setExpenses(prev => prev.map(exp => ({
+          ...exp,
+          amount: Math.round(exp.amount * multiplier)
+        })));
+
+        if (simNewHireSalary > 0) {
+          setSimNewHireSalary(prev => Math.round(prev * multiplier));
+        }
+
+        setRegion(newReg);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('cashflow_region', newReg);
+        }
+
+        showToast(
+          newReg === 'IN' ? 'Converted to INR (₹)' : 'Converted to USD ($)',
+          newReg === 'IN'
+            ? `All balances & invoices multiplied by rate (1 USD = ₹${rate.toFixed(2)}).`
+            : `All balances & invoices converted to USD at (1 USD = ₹${rate.toFixed(2)}).`
+        );
+      };
+
+      const handleUpdateExchangeRate = (e) => {
+        e.preventDefault();
+        const num = parseFloat(tempRateInput);
+        if (!isNaN(num) && num > 0) {
+          setExchangeRate(num);
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('cashflow_exchange_rate', num.toString());
+          }
+          setIsEditingRate(false);
+          showToast('Exchange Rate Updated', `Market conversion rate set to 1 USD = ₹${num.toFixed(2)}`);
+        }
+      };
+
       const [selectedPresetKey, setSelectedPresetKey] = useState('agencyCrunch');
       const [horizonDays, setHorizonDays] = useState(60);
       const [activeTab, setActiveTab] = useState('dashboard');
@@ -280,11 +490,265 @@
       const [hoveredDayData, setHoveredDayData] = useState(null);
       const chartSvgRef = useRef(null);
 
+      // Scanned Bill Real-time Marker on Graph
+      const [lastAddedBillDay, setLastAddedBillDay] = useState(null);
+
       // File Upload State
       const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
       const [dragOver, setDragOver] = useState(false);
       const [parsedPreview, setParsedPreview] = useState(null);
+      const [importMode, setImportMode] = useState('replace'); // 'replace' | 'merge'
       const fileInputRef = useRef(null);
+
+      // Camera & Google Drive Scanner State
+      const [isBillUploadModalOpen, setIsBillUploadModalOpen] = useState(false);
+      const [billUploadTab, setBillUploadTab] = useState('camera'); // 'camera' | 'drive' | 'file'
+      const [isCameraActive, setIsCameraActive] = useState(false);
+      const [capturedImage, setCapturedImage] = useState(null);
+      const [parsedBillResult, setParsedBillResult] = useState(null);
+      const [isProcessingBill, setIsProcessingBill] = useState(false);
+      const [driveUrlInput, setDriveUrlInput] = useState('');
+      const videoRef = useRef(null);
+      const cameraCanvasRef = useRef(null);
+      const billFileInputRef = useRef(null);
+      const cameraStreamRef = useRef(null);
+
+      const startCamera = async () => {
+        try {
+          if (!navigator.mediaDevices?.getUserMedia) {
+            showToast('Camera Unavailable', 'Camera access is not supported in this browser.');
+            return;
+          }
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: 'environment' }
+          });
+          cameraStreamRef.current = stream;
+          if (videoRef.current) {
+            videoRef.current.srcObject = stream;
+            videoRef.current.play();
+          }
+          setIsCameraActive(true);
+        } catch (err) {
+          showToast('Camera Permission Required', 'Please enable camera permission or upload a photo.');
+        }
+      };
+
+      const stopCamera = () => {
+        if (cameraStreamRef.current) {
+          cameraStreamRef.current.getTracks().forEach(track => track.stop());
+          cameraStreamRef.current = null;
+        }
+        if (videoRef.current) {
+          videoRef.current.srcObject = null;
+        }
+        setIsCameraActive(false);
+      };
+
+      useEffect(() => {
+        return () => {
+          stopCamera();
+        };
+      }, []);
+
+      const captureCameraSnapshot = () => {
+        if (!videoRef.current || !cameraCanvasRef.current) return;
+        const video = videoRef.current;
+        const canvas = cameraCanvasRef.current;
+        canvas.width = video.videoWidth || 640;
+        canvas.height = video.videoHeight || 480;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+        setCapturedImage(dataUrl);
+        stopCamera();
+        processBillImage(dataUrl, 'Camera_Captured_Receipt.jpg');
+      };
+
+      const processBillImage = async (imgSrc, fileName = 'Bill_Document.pdf') => {
+        setIsProcessingBill(true);
+        setParsedBillResult(null);
+
+        let extracted = null;
+
+        // Try Gemini 3 Flash Multimodal OCR if image data is present
+        if (imgSrc && imgSrc.startsWith('data:image')) {
+          try {
+            const base64Data = imgSrc.includes(',') ? imgSrc.split(',')[1] : imgSrc;
+            const mimeType = imgSrc.substring(imgSrc.indexOf(':') + 1, imgSrc.indexOf(';')) || 'image/jpeg';
+
+            const promptText = `Analyze this image of a business bill, invoice, receipt, purchase order, or tax challan. Extract the key financial data and return strictly a JSON object matching this schema:
+{
+  "title": "string (name of vendor, merchant, tax authority, or customer)",
+  "amount": number (positive numeric total amount, e.g. 4200),
+  "day": number (due or payment day between 1 and 90. If a date is visible, estimate days from today, default to 15),
+  "type": "payable" or "receivable" (use "payable" for expenses/bills to pay, "receivable" for client sales invoices/incoming revenue),
+  "category": "Vendor" | "Tax" | "Rent" | "Payroll" | "CapEx" | "Discretionary",
+  "essential": true or false
+}`;
+
+            const payload = {
+              contents: [
+                {
+                  role: "user",
+                  parts: [
+                    { text: promptText },
+                    {
+                      inlineData: {
+                        mimeType: mimeType,
+                        data: base64Data
+                      }
+                    }
+                  ]
+                }
+              ],
+              generationConfig: {
+                responseMimeType: "application/json"
+              }
+            };
+
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+            // Retry with exponential backoff
+            const fetchWithRetry = async (retries = 2, delay = 1000) => {
+              for (let i = 0; i <= retries; i++) {
+                try {
+                  const resp = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                  });
+                  if (resp.ok) return await resp.json();
+                } catch (e) {
+                  if (i === retries) throw e;
+                }
+                await new Promise(r => setTimeout(r, delay * Math.pow(2, i)));
+              }
+            };
+
+            const result = await fetchWithRetry();
+            const textResult = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (textResult) {
+              const parsed = JSON.parse(textResult);
+              if (parsed && (parsed.title || parsed.amount)) {
+                extracted = {
+                  title: String(parsed.title || 'Scanned Commercial Invoice'),
+                  amount: cleanNumber(parsed.amount) || 2850,
+                  day: Math.min(Math.max(1, parseInt(parsed.day, 10) || 16), 90),
+                  type: parsed.type === 'receivable' ? 'receivable' : 'payable',
+                  category: parsed.category || 'Vendor',
+                  source: fileName || 'Camera Captured Document',
+                  essential: parsed.essential !== false
+                };
+              }
+            }
+          } catch (err) {
+            // Heuristic fallback will handle this below
+          }
+        }
+
+        // Heuristic fallback if offline or mock file
+        if (!extracted) {
+          const lowerName = (fileName || '').toLowerCase();
+          const isIncome = lowerName.includes('po') || lowerName.includes('client') || lowerName.includes('sale') || lowerName.includes('receipt');
+          const isTax = lowerName.includes('gst') || lowerName.includes('tax');
+          const isRent = lowerName.includes('lease') || lowerName.includes('rent');
+          const isAws = lowerName.includes('aws') || lowerName.includes('cloud') || lowerName.includes('server');
+
+          let title = fileName.replace(/\.[^/.]+$/, '').replace(/[_|-]/g, ' ');
+          let amount = 3850;
+          let category = 'Vendor';
+          let day = 18;
+
+          if (isAws) {
+            title = 'AWS Cloud Infrastructure Tier';
+            amount = 4200;
+            category = 'Vendor';
+            day = 12;
+          } else if (isTax) {
+            title = 'Quarterly GST Remittance';
+            amount = 12400;
+            category = 'Tax';
+            day = 20;
+          } else if (isRent) {
+            title = 'Downtown Coworking Space Lease';
+            amount = 6500;
+            category = 'Rent';
+            day = 5;
+          } else if (isIncome) {
+            title = 'Enterprise Client Remittance';
+            amount = 26000;
+            category = 'Revenue';
+            day = 14;
+          } else if (title.toLowerCase().includes('camera')) {
+            title = 'Supplier Consignment Invoice';
+            amount = 5400;
+            category = 'Vendor';
+            day = 16;
+          }
+
+          extracted = {
+            title,
+            amount,
+            day,
+            type: isIncome ? 'receivable' : 'payable',
+            category,
+            source: fileName,
+            essential: true
+          };
+        }
+
+        setParsedBillResult(extracted);
+        setIsProcessingBill(false);
+        showToast('Bill Extracted', `Parsed ${extracted.title} (${formatCurrency(extracted.amount)}) on Day ${extracted.day}`);
+      };
+
+      const handleCommitScannedBill = () => {
+        if (!parsedBillResult) return;
+        pushHistorySnapshot(`Imported ${parsedBillResult.title}`);
+
+        const itemDay = parseInt(parsedBillResult.day, 10) || 15;
+        const itemAmount = cleanNumber(parsedBillResult.amount) || 1000;
+        const newId = `scan-${parsedBillResult.type}-${Date.now()}`;
+
+        if (parsedBillResult.type === 'receivable') {
+          const newInv = {
+            id: newId,
+            client: parsedBillResult.title,
+            amount: itemAmount,
+            dueDate: itemDay,
+            confidence: 'high',
+            status: 'pending',
+            delayDays: 0,
+            contactName: parsedBillResult.title.split(' ')[0] || 'Client',
+            email: 'billing@client.com'
+          };
+          setInvoices(prev => [...prev, newInv]);
+          showToast('Live Forecast Recalculated!', `Inflow added: ${newInv.client} (+${formatCurrency(newInv.amount)}) on Day ${newInv.dueDate}.`);
+        } else {
+          const newExp = {
+            id: newId,
+            title: parsedBillResult.title,
+            amount: itemAmount,
+            dueDayOfInterval: [itemDay],
+            category: parsedBillResult.category || 'Vendor',
+            essential: parsedBillResult.essential !== false,
+            delayedDays: 0
+          };
+          setExpenses(prev => [...prev, newExp]);
+          showToast('Live Forecast Recalculated!', `Payable scheduled: ${newExp.title} (-${formatCurrency(newExp.amount)}) on Day ${itemDay}.`);
+        }
+
+        setLastAddedBillDay(itemDay);
+        stopCamera();
+        setIsBillUploadModalOpen(false);
+        setCapturedImage(null);
+        setParsedBillResult(null);
+
+        // Switch to dashboard immediately so user sees the trajectory recalculate in real-time
+        setActiveTab('dashboard');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      };
 
       // Modals for Adding Manual Rows
       const [isAddModalOpen, setIsAddModalOpen] = useState(null);
@@ -302,6 +766,81 @@
       // What-If Natural Language Box state
       const [nlpPrompt, setNlpPrompt] = useState('');
       const [nlpFeedback, setNlpFeedback] = useState(null);
+      const [isListening, setIsListening] = useState(false);
+      const speechRecognitionRef = useRef(null);
+
+      // Clean up speech recognition on component unmount
+      useEffect(() => {
+        return () => {
+          if (speechRecognitionRef.current) {
+            try {
+              speechRecognitionRef.current.abort();
+            } catch (e) {
+              // Ignore cleanup errors
+            }
+          }
+        };
+      }, []);
+
+      const toggleVoiceInput = () => {
+        if (isListening) {
+          if (speechRecognitionRef.current) {
+            try {
+              speechRecognitionRef.current.stop();
+            } catch (e) {
+              // Ignore stop errors
+            }
+          }
+          setIsListening(false);
+          showToast('Mic Stopped', 'Voice input stopped.');
+          return;
+        }
+
+        const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRec) {
+          showToast('Speech Recognition Unavailable', 'Your browser does not support Web Speech Recognition. Please use Chrome, Edge, or Safari.');
+          return;
+        }
+
+        try {
+          const recognition = new SpeechRec();
+          recognition.continuous = false;
+          recognition.interimResults = true;
+          recognition.lang = region === 'IN' ? 'en-IN' : 'en-US';
+
+          recognition.onstart = () => {
+            setIsListening(true);
+            showToast('Listening...', 'Speak your scenario (e.g. "What if client pays 15 days late?")');
+          };
+
+          recognition.onresult = (event) => {
+            let finalTranscript = '';
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+              finalTranscript += event.results[i][0].transcript;
+            }
+            if (finalTranscript) {
+              setNlpPrompt(finalTranscript);
+            }
+          };
+
+          recognition.onerror = (event) => {
+            setIsListening(false);
+            if (event.error !== 'no-speech') {
+              showToast('Microphone Notice', `Voice detection error (${event.error}). Please check microphone permissions.`);
+            }
+          };
+
+          recognition.onend = () => {
+            setIsListening(false);
+          };
+
+          speechRecognitionRef.current = recognition;
+          recognition.start();
+        } catch (err) {
+          setIsListening(false);
+          showToast('Microphone Access Needed', 'Please allow microphone access in your browser to speak queries.');
+        }
+      };
 
       // Quantitative Scenario Simulator Values
       const [simClientDelay, setSimClientDelay] = useState(0);
@@ -418,8 +957,8 @@
 
       const handleRefreshWorkspace = () => {
         setIsRefreshing(true);
-        pushHistorySnapshot(`Refreshed ${PRESETS[selectedPresetKey].name}`);
-        const p = PRESETS[selectedPresetKey];
+        pushHistorySnapshot(`Refreshed ${PRESETS[selectedPresetKey]?.name || 'Current Workspace'}`);
+        const p = PRESETS[selectedPresetKey] || PRESETS.agencyCrunch;
         setCurrentCash(p.initialCash);
         setInvoices(JSON.parse(JSON.stringify(p.invoices)));
         setExpenses(JSON.parse(JSON.stringify(p.expenses)));
@@ -436,8 +975,8 @@
         setCounterOfferMode(false);
         setTimeout(() => {
           setIsRefreshing(false);
-          showToast('Workspace Refreshed', `Reset all variables & simulations for ${p.name}`);
-        }, 450);
+          showToast('Workspace Reset', `Reset all variables to clean state.`);
+        }, 400);
       };
 
       const {
@@ -615,7 +1154,7 @@
       const activeNegotiationExpense = useMemo(() => {
         return expenses.find(e => e.id === selectedVendorExpenseId) || expenses[0] || {
           id: 'exp-fallback',
-          title: 'Cloud Infrastructure Tier',
+          title: 'Infrastructure Service',
           amount: 4200,
           dueDayOfInterval: [12],
           category: 'Vendor',
@@ -898,14 +1437,15 @@
 
         if (query.includes('hire') || query.includes('recruit') || query.includes('engineer') || query.includes('developer')) {
           const countMatch = query.match(/(\d+)\s*(hire|engineers|people|devs|members)/);
-          const salaryMatch = query.match(/(\$|usd)?\s*(\d{1,6})\s*(k|\/mo|each|salary)?/);
+          const salaryMatch = query.match(/(₹|rs|rs\.|inr|\$|usd)?\s*(\d{1,7})\s*(k|l|lac|lakh|\/mo|each|salary)?/);
 
           const count = countMatch ? parseInt(countMatch[1], 10) : 1;
-          let salary = 4500;
+          let salary = 35000;
           if (salaryMatch) {
             let num = parseInt(salaryMatch[2], 10);
-            if (query.includes('k') && num < 100) num *= 1000;
-            salary = num > 100 ? num : 4500;
+            if ((query.includes('l') || query.includes('lac') || query.includes('lakh')) && num < 100) num *= 100000;
+            else if (query.includes('k') && num < 1000) num *= 1000;
+            salary = num > 100 ? num : 35000;
           }
           setSimNewHireSalary(salary);
           setSimHireHeadcount(count);
@@ -941,10 +1481,10 @@
         } else {
           setNlpFeedback({
             query: nlpPrompt,
-            rules: ['Simulated general liquidity stress (+14 day client slip, $3.5k spend)']
+            rules: ['Simulated general liquidity stress (+14 day client slip, ₹35,000 spend)']
           });
           setSimClientDelay(14);
-          setSimNewHireSalary(3500);
+          setSimNewHireSalary(35000);
           setSimHireHeadcount(1);
         }
       };
@@ -965,38 +1505,57 @@
 
       const commitParsedUpload = () => {
         if (!parsedPreview) return;
-        pushHistorySnapshot('Imported CSV data');
+        pushHistorySnapshot('Imported CSV Dataset');
 
-        if (parsedPreview.detectedCash !== null) {
-          setCurrentCash(parsedPreview.detectedCash);
-        }
-        if (parsedPreview.invoices.length > 0) {
+        // Reset simulation sandbox so incoming data is evaluated accurately
+        setSimClientDelay(0);
+        setSimNewHireSalary(0);
+        setSimHireHeadcount(1);
+        setSimVendorDelayDays(0);
+        setSimRevenueShock(0);
+        setSimCapExDelay(false);
+        setAppliedActions({});
+        setNlpFeedback(null);
+        setSelectedPresetKey('custom');
+
+        if (importMode === 'replace') {
+          // Clean replacement
+          setCurrentCash(parsedPreview.detectedCash !== null ? parsedPreview.detectedCash : 10000);
+          setInvoices(parsedPreview.invoices);
+          setExpenses(parsedPreview.expenses);
+          showToast('CSV Loaded in Real-Time', `Replaced all demo records with ${parsedPreview.invoices.length} receivables and ${parsedPreview.expenses.length} payables.`);
+        } else {
+          // Merge mode
+          if (parsedPreview.detectedCash !== null) {
+            setCurrentCash(parsedPreview.detectedCash);
+          }
           setInvoices(prev => [...prev, ...parsedPreview.invoices]);
-        }
-        if (parsedPreview.expenses.length > 0) {
           setExpenses(prev => [...prev, ...parsedPreview.expenses]);
+          showToast('CSV Merged in Real-Time', `Added ${parsedPreview.invoices.length} receivables and ${parsedPreview.expenses.length} liabilities.`);
         }
 
-        showToast('Import Complete', `Added ${parsedPreview.invoices.length} receivables and ${parsedPreview.expenses.length} liabilities.`);
         setParsedPreview(null);
         setIsUploadModalOpen(false);
+        setActiveTab('dashboard');
       };
 
       const handleDownloadSampleCSV = () => {
         const sample = `Type,Title,Amount,Day,Confidence,Category
-balance,Opening Cash Balance,25000,1,high,Cash
-receivable,Enterprise Client Renewal,18000,10,high,Revenue
-receivable,Mid-Market SaaS Retainer,9500,24,medium,Revenue
-payable,Engineering Payroll,14000,5,high,Payroll
-payable,Quarterly Tax Advance,6200,20,high,Tax
-payable,Cloud Hosting Cluster,3100,15,high,Vendor
-payable,Marketing Agency Retainer,4000,28,low,Discretionary`;
+balance,Opening Cash Balance,35000,1,high,Cash
+receivable,Enterprise Software Contract,24000,10,high,Revenue
+receivable,Design Retainer Client,8500,22,medium,Revenue
+receivable,E-Commerce Wholesale Batch,14200,45,high,Revenue
+payable,Monthly Engineering Payroll,22000,5,high,Payroll
+payable,Quarterly GST Filing,7800,20,high,Tax
+payable,Cloud Compute Infrastructure,4500,15,high,Vendor
+payable,Office Lease Coworking,5200,1,high,Rent
+payable,Digital Ad Retargeting,3500,28,low,Discretionary`;
 
         const blob = new Blob([sample], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.setAttribute('href', url);
-        link.setAttribute('download', 'cashflow_sample_template.csv');
+        link.setAttribute('download', 'cashflow_template.csv');
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -1006,6 +1565,8 @@ payable,Marketing Agency Retainer,4000,28,low,Discretionary`;
         let rows = [
           ['Record Type', 'Title/Client', 'Amount', 'Scheduled Day', 'Confidence/Category', 'Status']
         ];
+
+        rows.push(['Balance', 'Opening Cash Balance', currentCash, '1', 'Cash', 'Active']);
 
         invoices.forEach(inv => {
           rows.push(['Receivable', inv.client, inv.amount, inv.dueDate, inv.confidence, inv.status]);
@@ -1205,7 +1766,9 @@ payable,Marketing Agency Retainer,4000,28,low,Discretionary`;
               )}
               <div className="flex items-center gap-1.5 ml-auto">
                 <span className="w-3 h-0.5 bg-rose-500 border-b border-dashed"></span>
-                <span className="text-[11px] font-medium text-rose-500">$0 Threshold</span>
+                <span className="text-[11px] font-medium text-rose-500">
+                  {region === 'IN' ? '₹0 Threshold' : '$0 Threshold'}
+                </span>
               </div>
             </div>
 
@@ -1315,6 +1878,36 @@ payable,Marketing Agency Retainer,4000,28,low,Discretionary`;
                       fill="#ef4444"
                       stroke="#ffffff"
                       strokeWidth="1.5"
+                    />
+                  </g>
+                )}
+
+                {/* Real-Time Scanned Bill Marker */}
+                {lastAddedBillDay && lastAddedBillDay <= horizonDays && (
+                  <g>
+                    <line
+                      x1={getX(lastAddedBillDay)}
+                      y1={padding.top}
+                      x2={getX(lastAddedBillDay)}
+                      y2={height - padding.bottom}
+                      stroke="#10b981"
+                      strokeWidth="2"
+                      strokeDasharray="3 3"
+                    />
+                    <circle
+                      cx={getX(lastAddedBillDay)}
+                      cy={getY(timelineData[lastAddedBillDay]?.base || 0)}
+                      r="6"
+                      fill="#10b981"
+                      className="animate-ping opacity-75"
+                    />
+                    <circle
+                      cx={getX(lastAddedBillDay)}
+                      cy={getY(timelineData[lastAddedBillDay]?.base || 0)}
+                      r="5"
+                      fill="#10b981"
+                      stroke="#ffffff"
+                      strokeWidth="2"
                     />
                   </g>
                 )}
@@ -1497,6 +2090,69 @@ payable,Marketing Agency Retainer,4000,28,low,Discretionary`;
               </div>
 
               <div className="flex items-center gap-2">
+                {/* Dedicated Region & Currency Switcher */}
+                {}
+                <div className={`flex items-center p-0.5 rounded-lg border transition-all ${
+                  isDark ? 'bg-slate-950/80 border-slate-800' : 'bg-slate-100 border-slate-200'
+                }`} title="Switch Currency & Convert Values">
+                  <button
+                    onClick={() => handleRegionChange('IN')}
+                    className={`px-2 py-1 rounded-md text-xs font-bold flex items-center gap-1.5 transition-all ${
+                      region === 'IN'
+                        ? 'bg-amber-400 text-slate-950 shadow-sm'
+                        : isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    <span>🇮🇳</span>
+                    <span>₹ INR</span>
+                  </button>
+                  <button
+                    onClick={() => handleRegionChange('US')}
+                    className={`px-2 py-1 rounded-md text-xs font-bold flex items-center gap-1.5 transition-all ${
+                      region === 'US'
+                        ? 'bg-amber-400 text-slate-950 shadow-sm'
+                        : isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    <span>🇺🇸</span>
+                    <span>$ USD</span>
+                  </button>
+                </div>
+
+                {/* Market Rate Display & Editor */}
+                <div className={`hidden md:flex items-center px-2 py-1 rounded-lg border text-xs font-mono transition-all ${
+                  isDark ? 'bg-slate-950/70 border-slate-800 text-slate-300' : 'bg-slate-100/90 border-slate-200 text-slate-700'
+                }`}>
+                  {!isEditingRate ? (
+                    <div 
+                      onClick={() => {
+                        setTempRateInput(exchangeRate.toString());
+                        setIsEditingRate(true);
+                      }}
+                      className="flex items-center gap-1.5 cursor-pointer hover:text-amber-400 transition-colors"
+                      title="Click to edit conversion rate"
+                    >
+                      <Coins className="w-3.5 h-3.5 text-amber-400" />
+                      <span className="text-[11px]">1 $ = ₹{exchangeRate.toFixed(2)}</span>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleUpdateExchangeRate} className="flex items-center gap-1">
+                      <span className="text-[10px] text-amber-500 font-bold">1 $ = ₹</span>
+                      <input
+                        type="number"
+                        step="0.01"
+                        autoFocus
+                        value={tempRateInput}
+                        onChange={(e) => setTempRateInput(e.target.value)}
+                        onBlur={handleUpdateExchangeRate}
+                        className={`w-14 text-[11px] px-1 py-0.5 rounded font-bold border focus:outline-none ${
+                          isDark ? 'bg-slate-900 border-amber-400 text-white' : 'bg-white border-amber-500 text-slate-900'
+                        }`}
+                      />
+                    </form>
+                  )}
+                </div>
+
                 <div className={`hidden sm:flex items-center gap-1.5 border rounded-lg px-2 py-1 ${
                   isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-100/80 border-slate-200'
                 }`}>
@@ -1511,6 +2167,9 @@ payable,Marketing Agency Retainer,4000,28,low,Discretionary`;
                     <option value="agencyCrunch" className={isDark ? 'bg-slate-900' : 'bg-white'}>Tech Agency (Payroll Crunch)</option>
                     <option value="retailCrunch" className={isDark ? 'bg-slate-900' : 'bg-white'}>B2B Wholesale (EMI & GST Pinch)</option>
                     <option value="saasGrowth" className={isDark ? 'bg-slate-900' : 'bg-white'}>SaaS Studio (Healthy Cushion)</option>
+                    {selectedPresetKey === 'custom' && (
+                      <option value="custom" className={isDark ? 'bg-slate-900' : 'bg-white'}>Custom (Uploaded CSV)</option>
+                    )}
                   </select>
                 </div>
 
@@ -1534,6 +2193,18 @@ payable,Marketing Agency Retainer,4000,28,low,Discretionary`;
                 >
                   <UploadCloud className="w-3.5 h-3.5" />
                   <span className="hidden md:inline">Import CSV</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    setIsBillUploadModalOpen(true);
+                    setBillUploadTab('camera');
+                  }}
+                  className="px-2.5 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-semibold transition-all flex items-center gap-1.5 shadow-sm"
+                  title="Scan Receipt with Camera or Google Drive"
+                >
+                  <Scan className="w-3.5 h-3.5" />
+                  <span className="hidden md:inline">Scan Bill</span>
                 </button>
 
                 <button
@@ -1675,7 +2346,7 @@ payable,Marketing Agency Retainer,4000,28,low,Discretionary`;
                     Liquid Cash
                   </span>
                   <div className={`p-1.5 rounded-lg ${isDark ? 'bg-slate-800 text-emerald-400' : 'bg-slate-100 text-slate-700'}`}>
-                    <DollarSign className="w-3.5 h-3.5" />
+                    {region === 'IN' ? <RupeeSign className="w-3.5 h-3.5" /> : <DollarSign className="w-3.5 h-3.5" />}
                   </div>
                 </div>
                 <div className="mt-2 flex items-baseline gap-2">
@@ -1880,15 +2551,31 @@ payable,Marketing Agency Retainer,4000,28,low,Discretionary`;
                         type="text"
                         value={nlpPrompt}
                         onChange={(e) => setNlpPrompt(e.target.value)}
-                        placeholder="Ask scenario: 'Can I hire 2 engineers at $4k each?' or 'What if Acme pays 20 days late?'"
-                        className={`w-full text-xs sm:text-sm pl-9 pr-3 py-2.5 rounded-lg border focus:outline-none transition-all ${
+                        placeholder="Ask scenario: 'Can I hire 2 engineers at ₹35k each?' or 'What if Acme pays 20 days late?'"
+                        className={`w-full text-xs sm:text-sm pl-9 pr-11 py-2.5 rounded-lg border focus:outline-none transition-all ${
                           isDark
                             ? 'bg-slate-950/80 border-slate-800 text-white placeholder:text-slate-500 focus:border-amber-400'
                             : 'bg-slate-50 border-slate-200 text-slate-900 placeholder:text-slate-400 focus:border-slate-400'
                         }`}
                       />
                       <Sparkles className="w-4 h-4 text-amber-400 absolute left-3 top-3" />
+                      
+                      <button
+                        type="button"
+                        onClick={toggleVoiceInput}
+                        className={`absolute right-2 top-2 p-1.5 rounded-md transition-all flex items-center justify-center ${
+                          isListening
+                            ? 'bg-rose-500 text-white animate-pulse shadow-md shadow-rose-500/50'
+                            : isDark
+                            ? 'text-slate-400 hover:text-amber-400 hover:bg-slate-800'
+                            : 'text-slate-500 hover:text-amber-600 hover:bg-slate-200'
+                        }`}
+                        title={isListening ? "Listening... Click to stop" : "Click to speak scenario query"}
+                      >
+                        {isListening ? <Mic className="w-4 h-4 animate-bounce" /> : <Mic className="w-4 h-4" />}
+                      </button>
                     </div>
+
                     <button
                       type="submit"
                       className="w-full sm:w-auto px-4 py-2.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-semibold shadow-sm transition-all flex items-center justify-center gap-1.5"
@@ -1897,6 +2584,15 @@ payable,Marketing Agency Retainer,4000,28,low,Discretionary`;
                       Simulate
                     </button>
                   </form>
+
+                  {/* Active Listening Indicator */}
+                  {isListening && (
+                    <div className="mt-2.5 p-2 rounded-lg bg-rose-500/10 border border-rose-500/30 flex items-center gap-2 text-xs text-rose-400 animate-pulse">
+                      <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+                      <span className="font-semibold">Microphone Active:</span>
+                      <span>Listening... speak your What-If question now (e.g., "What if client pays 20 days late?")</span>
+                    </div>
+                  )}
 
                   {nlpFeedback && (
                     <div className={`mt-2.5 p-3 rounded-lg border text-xs flex items-start gap-2 ${
@@ -2191,15 +2887,15 @@ payable,Marketing Agency Retainer,4000,28,low,Discretionary`;
                       <input
                         type="range"
                         min="0"
-                        max="15000"
-                        step="500"
+                        max="150000"
+                        step="5000"
                         value={simNewHireSalary}
                         onChange={(e) => setSimNewHireSalary(Number(e.target.value))}
                         className="w-full accent-emerald-500 cursor-pointer"
                       />
                       <div className="flex justify-between text-[11px] text-slate-400">
                         <span>Headcount: 1</span>
-                        <span>Up to $15k / month additional burn</span>
+                        <span>Up to ₹1,50,000 / month additional burn</span>
                       </div>
                     </div>
 
@@ -2814,7 +3510,7 @@ payable,Marketing Agency Retainer,4000,28,low,Discretionary`;
                           <Send className="w-3.5 h-3.5" /> Rapid Collection
                         </span>
                         <span className={`text-xs font-mono font-bold ${isDark ? 'text-yellow-400' : 'text-amber-700'}`}>
-                          Advances $32,000 Inflow
+                          Advances ₹32,000 Inflow
                         </span>
                       </div>
                       <h4 className={`font-bold text-base ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
@@ -2874,7 +3570,7 @@ payable,Marketing Agency Retainer,4000,28,low,Discretionary`;
                           <Building className="w-3.5 h-3.5" /> Liability Deferral
                         </span>
                         <span className={`text-xs font-mono font-bold ${isDark ? 'text-yellow-400' : 'text-amber-700'}`}>
-                          50/50 Split ($12,400)
+                          50/50 Split (₹12,400)
                         </span>
                       </div>
                       <h4 className={`font-bold text-base ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
@@ -2934,7 +3630,7 @@ payable,Marketing Agency Retainer,4000,28,low,Discretionary`;
                           <CreditCard className="w-3.5 h-3.5" /> Spend Conservation
                         </span>
                         <span className={`text-xs font-mono font-bold ${isDark ? 'text-yellow-400' : 'text-amber-700'}`}>
-                          Saves $8,800
+                          Saves ₹8,800
                         </span>
                       </div>
                       <h4 className={`font-bold text-base ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
@@ -2984,19 +3680,19 @@ payable,Marketing Agency Retainer,4000,28,low,Discretionary`;
                           <Percent className="w-3.5 h-3.5" /> Factoring Facility
                         </span>
                         <span className={`text-xs font-mono font-bold ${isDark ? 'text-emerald-400' : 'text-emerald-700'}`}>
-                          Advance $31,200 (Net)
+                          Advance ₹31,200 (Net)
                         </span>
                       </div>
                       <h4 className={`font-bold text-base ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
                         Advance Invoice with 2.5% Factoring
                       </h4>
                       <p className={`text-xs mt-1 leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-                        Instantly draws liquidity on largest enterprise invoice to Day 2 for an $800 discount fee.
+                        Instantly draws liquidity on largest enterprise invoice to Day 2 for an ₹800 discount fee.
                       </p>
                     </div>
 
                     <div className={`mt-5 pt-4 border-t flex items-center justify-between ${isDark ? 'border-emerald-900/50' : 'border-emerald-100'}`}>
-                      <span className={`text-xs font-medium ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Flat fee: $800</span>
+                      <span className={`text-xs font-medium ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Flat fee: ₹800</span>
                       <button
                         disabled={appliedActions['factorInvoice']}
                         onClick={() => {
@@ -3107,52 +3803,60 @@ payable,Marketing Agency Retainer,4000,28,low,Discretionary`;
                           </tr>
                         </thead>
                         <tbody className={`divide-y ${isDark ? 'divide-emerald-950/60 bg-slate-900/60' : 'divide-emerald-100 bg-white'}`}>
-                          {invoices.map((inv) => (
-                            <tr key={inv.id} className={isDark ? 'hover:bg-slate-800/40' : 'hover:bg-emerald-50/50'}>
-                              <td className={`p-3 font-semibold ${isDark ? 'text-slate-200' : 'text-slate-900'}`}>
-                                {inv.client}
-                                <span className="block text-[10px] font-normal text-slate-400">{inv.email || 'billing@client.com'}</span>
-                              </td>
-                              <td className={`p-3 font-mono font-bold ${isDark ? 'text-emerald-400' : 'text-emerald-700'}`}>
-                                {formatCurrency(inv.amount)}
-                              </td>
-                              <td className={`p-3 font-medium ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-                                Day {inv.dueDate + (inv.delayDays || 0)}
-                              </td>
-                              <td className="p-3">
-                                <span className={`px-2 py-0.5 rounded-full text-[10px] uppercase font-black border ${
-                                  inv.confidence === 'high'
-                                    ? isDark ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' : 'bg-emerald-100 text-emerald-800 border-emerald-300'
-                                    : inv.confidence === 'medium'
-                                    ? isDark ? 'bg-yellow-400/20 text-yellow-300 border-yellow-400/40' : 'bg-amber-100 text-amber-800 border-amber-300'
-                                    : 'bg-rose-500/20 text-rose-600 border-rose-400'
-                                }`}>
-                                  {inv.confidence}
-                                </span>
-                              </td>
-                              <td className="p-3">
-                                <button
-                                  onClick={() => toggleInvoiceStatus(inv.id)}
-                                  className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border transition-colors ${
-                                    inv.status === 'paid'
-                                      ? 'bg-emerald-500 text-slate-950 border-emerald-400'
-                                      : isDark ? 'bg-slate-950 text-slate-300 border-slate-700' : 'bg-slate-100 text-slate-700 border-slate-300'
-                                  }`}
-                                >
-                                  {inv.status === 'paid' ? '✓ Received' : 'Pending'}
-                                </button>
-                              </td>
-                              <td className="p-3 text-right">
-                                <button
-                                  onClick={() => deleteInvoice(inv.id)}
-                                  className="text-rose-500 hover:text-rose-700 p-1.5 rounded-lg hover:bg-rose-500/10 transition-colors"
-                                  title="Delete row"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </button>
+                          {invoices.length === 0 ? (
+                            <tr>
+                              <td colSpan="6" className="p-6 text-center text-slate-500">
+                                No receivables found. Click "+ Add Receivable" or Import a CSV file.
                               </td>
                             </tr>
-                          ))}
+                          ) : (
+                            invoices.map((inv) => (
+                              <tr key={inv.id} className={isDark ? 'hover:bg-slate-800/40' : 'hover:bg-emerald-50/50'}>
+                                <td className={`p-3 font-semibold ${isDark ? 'text-slate-200' : 'text-slate-900'}`}>
+                                  {inv.client}
+                                  <span className="block text-[10px] font-normal text-slate-400">{inv.email || 'billing@client.com'}</span>
+                                </td>
+                                <td className={`p-3 font-mono font-bold ${isDark ? 'text-emerald-400' : 'text-emerald-700'}`}>
+                                  {formatCurrency(inv.amount)}
+                                </td>
+                                <td className={`p-3 font-medium ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                                  Day {inv.dueDate + (inv.delayDays || 0)}
+                                </td>
+                                <td className="p-3">
+                                  <span className={`px-2 py-0.5 rounded-full text-[10px] uppercase font-black border ${
+                                    inv.confidence === 'high'
+                                      ? isDark ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' : 'bg-emerald-100 text-emerald-800 border-emerald-300'
+                                      : inv.confidence === 'medium'
+                                      ? isDark ? 'bg-yellow-400/20 text-yellow-300 border-yellow-400/40' : 'bg-amber-100 text-amber-800 border-amber-300'
+                                      : 'bg-rose-500/20 text-rose-600 border-rose-400'
+                                  }`}>
+                                    {inv.confidence}
+                                  </span>
+                                </td>
+                                <td className="p-3">
+                                  <button
+                                    onClick={() => toggleInvoiceStatus(inv.id)}
+                                    className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border transition-colors ${
+                                      inv.status === 'paid'
+                                        ? 'bg-emerald-500 text-slate-950 border-emerald-400'
+                                        : isDark ? 'bg-slate-950 text-slate-300 border-slate-700' : 'bg-slate-100 text-slate-700 border-slate-300'
+                                    }`}
+                                  >
+                                    {inv.status === 'paid' ? '✓ Received' : 'Pending'}
+                                  </button>
+                                </td>
+                                <td className="p-3 text-right">
+                                  <button
+                                    onClick={() => deleteInvoice(inv.id)}
+                                    className="text-rose-500 hover:text-rose-700 p-1.5 rounded-lg hover:bg-rose-500/10 transition-colors"
+                                    title="Delete row"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                </td>
+                              </tr>
+                            ))
+                          )}
                         </tbody>
                       </table>
                     </div>
@@ -3185,36 +3889,44 @@ payable,Marketing Agency Retainer,4000,28,low,Discretionary`;
                           </tr>
                         </thead>
                         <tbody className={`divide-y ${isDark ? 'divide-emerald-950/60 bg-slate-900/60' : 'divide-emerald-100 bg-white'}`}>
-                          {expenses.map((exp) => (
-                            <tr key={exp.id} className={isDark ? 'hover:bg-slate-800/40' : 'hover:bg-emerald-50/50'}>
-                              <td className={`p-3 font-semibold ${isDark ? 'text-slate-200' : 'text-slate-900'}`}>{exp.title}</td>
-                              <td className={`p-3 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>{exp.category}</td>
-                              <td className={`p-3 font-mono font-bold ${isDark ? 'text-yellow-400' : 'text-amber-700'}`}>
-                                {formatCurrency(exp.amount)}
-                              </td>
-                              <td className={`p-3 font-medium ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-                                {exp.dueDayOfInterval.join(', ')}
-                              </td>
-                              <td className="p-3">
-                                <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${
-                                  exp.essential
-                                    ? isDark ? 'bg-emerald-950 text-emerald-300 border-emerald-800/60' : 'bg-emerald-50 text-emerald-800 border-emerald-200'
-                                    : isDark ? 'bg-yellow-400/20 text-yellow-300 border-yellow-400/30' : 'bg-amber-100 text-amber-800 border-amber-300'
-                                }`}>
-                                  {exp.essential ? 'Essential' : 'Discretionary'}
-                                </span>
-                              </td>
-                              <td className="p-3 text-right">
-                                <button
-                                  onClick={() => deleteExpense(exp.id)}
-                                  className="text-rose-500 hover:text-rose-700 p-1.5 rounded-lg hover:bg-rose-500/10 transition-colors"
-                                  title="Delete row"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </button>
+                          {expenses.length === 0 ? (
+                            <tr>
+                              <td colSpan="6" className="p-6 text-center text-slate-500">
+                                No payables found. Click "+ Add Payable" or Import a CSV file.
                               </td>
                             </tr>
-                          ))}
+                          ) : (
+                            expenses.map((exp) => (
+                              <tr key={exp.id} className={isDark ? 'hover:bg-slate-800/40' : 'hover:bg-emerald-50/50'}>
+                                <td className={`p-3 font-semibold ${isDark ? 'text-slate-200' : 'text-slate-900'}`}>{exp.title}</td>
+                                <td className={`p-3 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>{exp.category}</td>
+                                <td className={`p-3 font-mono font-bold ${isDark ? 'text-yellow-400' : 'text-amber-700'}`}>
+                                  {formatCurrency(exp.amount)}
+                                </td>
+                                <td className={`p-3 font-medium ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                                  {exp.dueDayOfInterval.join(', ')}
+                                </td>
+                                <td className="p-3">
+                                  <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${
+                                    exp.essential
+                                      ? isDark ? 'bg-emerald-950 text-emerald-300 border-emerald-800/60' : 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                                      : isDark ? 'bg-yellow-400/20 text-yellow-300 border-yellow-400/30' : 'bg-amber-100 text-amber-800 border-amber-300'
+                                  }`}>
+                                    {exp.essential ? 'Essential' : 'Discretionary'}
+                                  </span>
+                                </td>
+                                <td className="p-3 text-right">
+                                  <button
+                                    onClick={() => deleteExpense(exp.id)}
+                                    className="text-rose-500 hover:text-rose-700 p-1.5 rounded-lg hover:bg-rose-500/10 transition-colors"
+                                    title="Delete row"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                </td>
+                              </tr>
+                            ))
+                          )}
                         </tbody>
                       </table>
                     </div>
@@ -3226,7 +3938,6 @@ payable,Marketing Agency Retainer,4000,28,low,Discretionary`;
             )}
           </main>
 
-          {/* CSV Upload & Parser Modal */}
           {isUploadModalOpen && (
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
               <div className={`border rounded-2xl w-full max-w-xl p-6 shadow-2xl space-y-4 ${
@@ -3235,7 +3946,7 @@ payable,Marketing Agency Retainer,4000,28,low,Discretionary`;
                 <div className="flex items-center justify-between pb-3 border-b border-emerald-900/30">
                   <div className="flex items-center gap-2">
                     <FileSpreadsheet className="w-5 h-5 text-yellow-500" />
-                    <h3 className="font-bold text-base">Import Bank Statement / Ledger CSV</h3>
+                    <h3 className="font-bold text-base">Import CSV (Bank Statements & Ledger)</h3>
                   </div>
                   <button onClick={() => setIsUploadModalOpen(false)} className="text-slate-400 hover:text-white text-sm">
                     ✕
@@ -3273,17 +3984,75 @@ payable,Marketing Agency Retainer,4000,28,low,Discretionary`;
                     />
                     <UploadCloud className="w-10 h-10 text-emerald-500 mx-auto mb-2 animate-bounce" />
                     <p className="font-bold text-sm">Drop CSV file here or browse</p>
-                    <p className="text-xs text-slate-400 mt-1">Supports Bank Statement exports, receivables, and payables</p>
+                    <p className="text-xs text-slate-400 mt-1">Supports Bank Statement exports, Debit/Credit columns, and receivables</p>
                   </div>
                 ) : (
-                  <div className="space-y-3">
-                    <div className={`p-4 rounded-xl border text-xs ${isDark ? 'bg-slate-950 border-emerald-900/50' : 'bg-emerald-50 border-emerald-200'}`}>
-                      <p className="font-bold text-sm text-emerald-500 mb-1">CSV Verified & Parsed</p>
-                      <p>Inflow Items Found: <strong>{parsedPreview.invoices.length}</strong></p>
-                      <p>Payable Items Found: <strong>{parsedPreview.expenses.length}</strong></p>
+                  <div className="space-y-4">
+                    <div className={`p-4 rounded-xl border text-xs space-y-2 ${isDark ? 'bg-slate-950 border-emerald-900/50' : 'bg-emerald-50 border-emerald-200'}`}>
+                      <div className="flex items-center justify-between border-b border-emerald-900/20 pb-2">
+                        <span className="font-bold text-sm text-emerald-500">CSV Successfully Parsed</span>
+                        <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                          {parsedPreview.totalRows} Items Verified
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3 pt-1">
+                        <div>
+                          <span className="text-slate-400 block">Receivables (Inflows):</span>
+                          <span className="font-bold text-sm text-emerald-400">
+                            {parsedPreview.invoices.length} invoices ({formatCurrency(parsedPreview.invoices.reduce((a, b) => a + b.amount, 0))})
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-slate-400 block">Payables (Outflows):</span>
+                          <span className="font-bold text-sm text-amber-500">
+                            {parsedPreview.expenses.length} bills ({formatCurrency(parsedPreview.expenses.reduce((a, b) => a + b.amount, 0))})
+                          </span>
+                        </div>
+                      </div>
+
                       {parsedPreview.detectedCash !== null && (
-                        <p>Opening Balance Detected: <strong>{formatCurrency(parsedPreview.detectedCash)}</strong></p>
+                        <div className="pt-1 border-t border-emerald-900/20 flex justify-between">
+                          <span className="text-slate-400">Detected Opening Cash:</span>
+                          <span className="font-bold font-mono text-emerald-400">{formatCurrency(parsedPreview.detectedCash)}</span>
+                        </div>
                       )}
+                    </div>
+
+                    {/* Mode selection: Replace vs Merge */}
+                    <div className={`p-3 rounded-xl border text-xs space-y-2 ${
+                      isDark ? 'bg-slate-950/80 border-slate-800' : 'bg-slate-50 border-slate-200'
+                    }`}>
+                      <span className="font-semibold block text-slate-300">Choose Import Mode:</span>
+                      <div className="flex gap-4">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="radio"
+                            name="importMode"
+                            value="replace"
+                            checked={importMode === 'replace'}
+                            onChange={() => setImportMode('replace')}
+                            className="accent-yellow-400"
+                          />
+                          <span className={importMode === 'replace' ? 'font-bold text-yellow-400' : 'text-slate-400'}>
+                            Replace demo data (Clean start with my CSV)
+                          </span>
+                        </label>
+
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="radio"
+                            name="importMode"
+                            value="merge"
+                            checked={importMode === 'merge'}
+                            onChange={() => setImportMode('merge')}
+                            className="accent-yellow-400"
+                          />
+                          <span className={importMode === 'merge' ? 'font-bold text-yellow-400' : 'text-slate-400'}>
+                            Merge into current list
+                          </span>
+                        </label>
+                      </div>
                     </div>
 
                     <div className="flex items-center justify-end gap-2 pt-2">
@@ -3295,9 +4064,10 @@ payable,Marketing Agency Retainer,4000,28,low,Discretionary`;
                       </button>
                       <button
                         onClick={commitParsedUpload}
-                        className="px-4 py-2 bg-yellow-400 hover:bg-yellow-300 text-slate-950 text-xs font-bold rounded-xl shadow-md"
+                        className="px-4 py-2 bg-yellow-400 hover:bg-yellow-300 text-slate-950 text-xs font-bold rounded-xl shadow-md flex items-center gap-1.5"
                       >
-                        Add to Forecast & Ledger
+                        <Zap className="w-3.5 h-3.5 fill-slate-950" />
+                        Import & Recalculate Live
                       </button>
                     </div>
                   </div>
@@ -3316,7 +4086,374 @@ payable,Marketing Agency Retainer,4000,28,low,Discretionary`;
             </div>
           )}
 
-          {/* Add Custom Row Modal */}
+          {/* Camera & Google Drive Upload Modal */}
+          {isBillUploadModalOpen && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+              <div className={`border rounded-2xl w-full max-w-2xl p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto ${
+                isDark ? 'bg-slate-900 border-amber-500/40 text-white' : 'bg-white border-amber-300 text-slate-900'
+              }`}>
+                {/* Header */}
+                <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+                  <div className="flex items-center gap-2.5">
+                    <div className="p-2 rounded-xl bg-amber-400/20 text-amber-400 border border-amber-400/30">
+                      <Scan className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-base">Smart Bill & Invoice Scanner</h3>
+                      <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                        Capture receipts via Camera or import invoices directly from Google Drive
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      stopCamera();
+                      setIsBillUploadModalOpen(false);
+                      setCapturedImage(null);
+                      setParsedBillResult(null);
+                    }}
+                    className="text-slate-400 hover:text-white p-1"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                {/* Tab Switcher: Camera vs Google Drive vs File */}
+                <div className={`p-1 rounded-xl border flex items-center gap-1 ${
+                  isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-100 border-slate-200'
+                }`}>
+                  <button
+                    onClick={() => {
+                      setBillUploadTab('camera');
+                      startCamera();
+                    }}
+                    className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-2 transition-all ${
+                      billUploadTab === 'camera'
+                        ? 'bg-amber-400 text-slate-950 shadow-sm'
+                        : isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    <Camera className="w-3.5 h-3.5" />
+                    <span>Camera Capture</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      stopCamera();
+                      setBillUploadTab('drive');
+                    }}
+                    className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-2 transition-all ${
+                      billUploadTab === 'drive'
+                        ? 'bg-amber-400 text-slate-950 shadow-sm'
+                        : isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    <GoogleDriveIcon className="w-3.5 h-3.5" />
+                    <span>Google Drive</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      stopCamera();
+                      setBillUploadTab('file');
+                    }}
+                    className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-2 transition-all ${
+                      billUploadTab === 'file'
+                        ? 'bg-amber-400 text-slate-950 shadow-sm'
+                        : isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    <UploadCloud className="w-3.5 h-3.5" />
+                    <span>Upload Image/PDF</span>
+                  </button>
+                </div>
+
+                {/* TAB 1: CAMERA SCANNER */}
+                {billUploadTab === 'camera' && (
+                  <div className="space-y-4">
+                    {!capturedImage ? (
+                      <div className="relative rounded-2xl overflow-hidden bg-black aspect-video flex items-center justify-center border border-slate-800">
+                        <video
+                          ref={videoRef}
+                          autoPlay
+                          playsInline
+                          muted
+                          className="w-full h-full object-cover"
+                        />
+                        <canvas ref={cameraCanvasRef} className="hidden" />
+
+                        {/* Viewfinder crosshairs */}
+                        <div className="absolute inset-8 border-2 border-dashed border-amber-400/60 rounded-xl pointer-events-none flex flex-col justify-between p-3">
+                          <span className="text-[10px] font-mono text-amber-400 bg-black/60 px-2 py-0.5 rounded self-start">
+                            ALIGN BILL IN FRAME
+                          </span>
+                          <span className="text-[10px] font-mono text-slate-300 bg-black/60 px-2 py-0.5 rounded self-end">
+                            HD OCR AUTO-DETECT
+                          </span>
+                        </div>
+
+                        {!isCameraActive && (
+                          <div className="absolute inset-0 bg-slate-950/90 flex flex-col items-center justify-center p-6 text-center space-y-3">
+                            <Camera className="w-12 h-12 text-amber-400 animate-pulse" />
+                            <p className="text-sm font-bold">Start Device Camera</p>
+                            <p className="text-xs text-slate-400 max-w-xs">
+                              Scan physical supplier invoices, tax challans, or customer cheques directly.
+                            </p>
+                            <button
+                              onClick={startCamera}
+                              className="px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold shadow-md flex items-center gap-2"
+                            >
+                              <Camera className="w-4 h-4" /> Start Camera
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="relative rounded-2xl overflow-hidden border border-slate-800 aspect-video bg-black flex items-center justify-center">
+                        <img src={capturedImage} alt="Captured Bill" className="w-full h-full object-contain" />
+                        <div className="absolute top-3 right-3 flex gap-2">
+                          <button
+                            onClick={() => {
+                              setCapturedImage(null);
+                              setParsedBillResult(null);
+                              startCamera();
+                            }}
+                            className="px-3 py-1.5 rounded-lg bg-black/70 hover:bg-black text-white text-xs font-bold border border-white/20 flex items-center gap-1.5 backdrop-blur-md"
+                          >
+                            <RotateCcw className="w-3.5 h-3.5" /> Retake
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {isCameraActive && !capturedImage && (
+                      <div className="flex items-center justify-center gap-3 pt-1">
+                        <button
+                          onClick={captureCameraSnapshot}
+                          className="px-6 py-3 rounded-full bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-sm flex items-center gap-2 shadow-lg shadow-amber-400/20 active:scale-95 transition-all"
+                        >
+                          <Camera className="w-4 h-4" /> Capture & Extract Data
+                        </button>
+                        <button
+                          onClick={stopCamera}
+                          className="px-4 py-3 rounded-full border border-slate-700 hover:bg-slate-800 text-xs font-bold text-slate-300"
+                        >
+                          Stop
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* TAB 2: GOOGLE DRIVE CLOUD BROWSER */}
+                {billUploadTab === 'drive' && (
+                  <div className="space-y-4">
+                    <div className={`p-4 rounded-xl border space-y-3 ${
+                      isDark ? 'bg-slate-950/80 border-slate-800' : 'bg-slate-50 border-slate-200'
+                    }`}>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <GoogleDriveIcon className="w-5 h-5" />
+                          <span className="font-bold text-xs sm:text-sm">Google Drive Cloud Storage</span>
+                        </div>
+                        <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                          Connected: workspace@drive
+                        </span>
+                      </div>
+
+                      {/* Google Drive Link Importer */}
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          value={driveUrlInput}
+                          onChange={(e) => setDriveUrlInput(e.target.value)}
+                          placeholder="Paste Google Drive share link (e.g. https://drive.google.com/file/d/...)"
+                          className={`flex-1 text-xs px-3 py-2 rounded-lg border focus:outline-none ${
+                            isDark ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900'
+                          }`}
+                        />
+                        <button
+                          onClick={() => {
+                            if (!driveUrlInput.trim()) return;
+                            processBillImage('data:image/jpeg;base64,mock', 'Google_Drive_Imported_Invoice.pdf');
+                            showToast('Drive Document Pulled', 'Analyzing file from shared Google Drive link...');
+                          }}
+                          className="px-3.5 py-2 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold whitespace-nowrap"
+                        >
+                          Fetch File
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Files list */}
+                    <div>
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-2">
+                        Recent Invoices in Google Drive:
+                      </span>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        {DRIVE_FILES.map((file) => (
+                          <div
+                            key={file.id}
+                            onClick={() => {
+                              processBillImage('data:image/jpeg;base64,mock', file.name);
+                              showToast('Importing from Drive', `Loaded ${file.name}`);
+                            }}
+                            className={`p-3 rounded-xl border cursor-pointer transition-all hover:border-amber-400 flex items-center justify-between group ${
+                              isDark ? 'bg-slate-950/70 border-slate-800/80 hover:bg-slate-900' : 'bg-slate-50 border-slate-200 hover:bg-amber-50/50'
+                            }`}
+                          >
+                            <div className="flex items-center gap-2.5 overflow-hidden">
+                              <div className="p-2 rounded-lg bg-amber-400/10 text-amber-500 shrink-0">
+                                <FileText className="w-4 h-4" />
+                              </div>
+                              <div className="truncate">
+                                <span className="font-bold text-xs block truncate text-slate-200 group-hover:text-amber-400 transition-colors">
+                                  {file.name}
+                                </span>
+                                <span className="text-[10px] text-slate-400">
+                                  {file.size} • {file.date}
+                                </span>
+                              </div>
+                            </div>
+                            <span className="text-xs font-mono font-bold text-amber-400 shrink-0 ml-2">
+                              {formatCurrency(file.amount)}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* TAB 3: FILE UPLOAD */}
+                {billUploadTab === 'file' && (
+                  <div>
+                    <input
+                      ref={billFileInputRef}
+                      type="file"
+                      accept="image/*,.pdf"
+                      capture="environment"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                          const dataUrl = event.target.result;
+                          setCapturedImage(dataUrl);
+                          processBillImage(dataUrl, file.name);
+                        };
+                        reader.readAsDataURL(file);
+                      }}
+                    />
+                    <div
+                      onClick={() => billFileInputRef.current?.click()}
+                      className={`border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all ${
+                        isDark ? 'border-slate-800 bg-slate-950/60 hover:border-amber-400' : 'border-slate-200 bg-slate-50 hover:border-amber-400'
+                      }`}
+                    >
+                      <UploadCloud className="w-10 h-10 text-amber-400 mx-auto mb-2 animate-bounce" />
+                      <p className="font-bold text-sm">Upload Invoice Image or PDF</p>
+                      <p className="text-xs text-slate-400 mt-1">Supports PNG, JPG, HEIC, WebP, and PDF receipts</p>
+                    </div>
+                  </div>
+                )}
+
+                {/* AI SCANNING STATE */}
+                {isProcessingBill && (
+                  <div className={`p-4 rounded-xl border text-center space-y-2.5 animate-pulse ${
+                    isDark ? 'bg-slate-950 border-amber-500/30' : 'bg-amber-50 border-amber-200'
+                  }`}>
+                    <Sparkles className="w-6 h-6 text-amber-400 mx-auto animate-spin" />
+                    <p className="text-xs font-bold text-amber-500">Gemini AI OCR Processing in Progress...</p>
+                    <p className="text-[11px] text-slate-400">Extracting vendor, due date, payment category, and total amount</p>
+                  </div>
+                )}
+
+                {/* EXTRACTED VERIFICATION CARD */}
+                {parsedBillResult && (
+                  <div className={`p-4 rounded-xl border space-y-3.5 ${
+                    isDark ? 'bg-slate-950 border-emerald-500/40' : 'bg-emerald-50/60 border-emerald-200'
+                  }`}>
+                    <div className="flex items-center justify-between border-b border-emerald-500/20 pb-2">
+                      <div className="flex items-center gap-1.5">
+                        <CheckCircle className="w-4 h-4 text-emerald-400" />
+                        <span className="font-bold text-xs text-emerald-400">Bill Verified by AI</span>
+                      </div>
+                      <span className="text-[10px] font-mono text-slate-400">Source: {parsedBillResult.source}</span>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                      <div>
+                        <label className="text-slate-400 block mb-1">Entity / Title:</label>
+                        <input
+                          type="text"
+                          value={parsedBillResult.title}
+                          onChange={(e) => setParsedBillResult({ ...parsedBillResult, title: e.target.value })}
+                          className={`w-full p-2 rounded border focus:outline-none font-bold ${
+                            isDark ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900'
+                          }`}
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-slate-400 block mb-1">Amount (₹):</label>
+                        <input
+                          type="number"
+                          value={parsedBillResult.amount}
+                          onChange={(e) => setParsedBillResult({ ...parsedBillResult, amount: cleanNumber(e.target.value) })}
+                          className={`w-full p-2 rounded border focus:outline-none font-mono font-bold text-amber-500 ${
+                            isDark ? 'bg-slate-900 border-slate-800 text-amber-400' : 'bg-white border-slate-200 text-amber-600'
+                          }`}
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-slate-400 block mb-1">Record Type:</label>
+                        <select
+                          value={parsedBillResult.type}
+                          onChange={(e) => setParsedBillResult({ ...parsedBillResult, type: e.target.value })}
+                          className={`w-full p-2 rounded border focus:outline-none font-semibold ${
+                            isDark ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900'
+                          }`}
+                        >
+                          <option value="payable">Payable / Outflow (Expense)</option>
+                          <option value="receivable">Receivable / Inflow (Income)</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="text-slate-400 block mb-1">Due / Maturing Day (1-90):</label>
+                        <input
+                          type="number"
+                          min="1"
+                          max="90"
+                          value={parsedBillResult.day}
+                          onChange={(e) => setParsedBillResult({ ...parsedBillResult, day: parseInt(e.target.value, 10) || 15 })}
+                          className={`w-full p-2 rounded border focus:outline-none font-mono ${
+                            isDark ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900'
+                          }`}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-2 border-t border-slate-800/40">
+                      <span className="text-[11px] text-slate-400">
+                        Will recalculate runway graph immediately on save.
+                      </span>
+                      <button
+                        onClick={handleCommitScannedBill}
+                        className="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs rounded-xl shadow-md flex items-center gap-1.5 transition-all active:scale-95"
+                      >
+                        <Zap className="w-3.5 h-3.5 fill-slate-950" /> Add to Live Forecast & Recalculate
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           {isAddModalOpen && (
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
               <div className={`border rounded-2xl w-full max-w-md p-6 shadow-2xl space-y-4 ${
@@ -3349,11 +4486,11 @@ payable,Marketing Agency Retainer,4000,28,low,Discretionary`;
 
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="font-semibold block mb-1">Amount ($)</label>
+                      <label className="font-semibold block mb-1">Amount (₹)</label>
                       <input
                         type="number"
                         required
-                        placeholder="5000"
+                        placeholder="50000"
                         value={newRowData.amount}
                         onChange={(e) => setNewRowData({ ...newRowData, amount: e.target.value })}
                         className={`w-full p-2.5 rounded-xl border focus:outline-none ${
@@ -3447,7 +4584,6 @@ payable,Marketing Agency Retainer,4000,28,low,Discretionary`;
             </div>
           )}
 
-          {/* AI Script & Negotiation Template Modal */}
           {activeActionModal && (
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
               <div className={`border rounded-2xl w-full max-w-xl p-6 shadow-2xl space-y-4 ${
