@@ -165,6 +165,33 @@
       </svg>
     );
 
+    const User = (p) => (
+      <IconBase {...p}>
+        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+        <circle cx="12" cy="7" r="4" />
+      </IconBase>
+    );
+    const Lock = (p) => (
+      <IconBase {...p}>
+        <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+      </IconBase>
+    );
+    const LogOut = (p) => (
+      <IconBase {...p}>
+        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+        <polyline points="16 17 21 12 16 7" />
+        <line x1="21" y1="12" x2="9" y2="12" />
+      </IconBase>
+    );
+    const LogIn = (p) => (
+      <IconBase {...p}>
+        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+        <polyline points="10 17 15 12 10 7" />
+        <line x1="15" y1="12" x2="3" y2="12" />
+      </IconBase>
+    );
+
     const DRIVE_FILES = [
       { id: 'drive-1', name: 'AWS_Cloud_Invoice_Oct.pdf', size: '1.2 MB', date: 'Yesterday', amount: 4200, category: 'Vendor', type: 'payable' },
       { id: 'drive-2', name: 'Office_Lease_Agreement_Q4.pdf', size: '3.4 MB', date: '3 days ago', amount: 6500, category: 'Rent', type: 'payable' },
@@ -512,6 +539,225 @@
       const cameraCanvasRef = useRef(null);
       const billFileInputRef = useRef(null);
       const cameraStreamRef = useRef(null);
+
+      const [registeredUsers, setRegisteredUsers] = useState([
+        {
+          id: 'user-demo-1',
+          companyName: 'Apex Innovations Pvt Ltd',
+          email: 'founder@apex.com',
+          password: 'password123',
+          role: 'Founder & CEO'
+        }
+      ]);
+
+      const [currentUser, setCurrentUser] = useState({
+        id: 'user-demo-1',
+        companyName: 'Apex Innovations Pvt Ltd',
+        email: 'founder@apex.com',
+        role: 'Founder & CEO'
+      });
+
+      // Multi-account workspace repository so each account maintains its own isolated data
+      const [userWorkspaces, setUserWorkspaces] = useState({
+        'user-demo-1': {
+          currentCash: PRESETS.agencyCrunch.initialCash,
+          invoices: JSON.parse(JSON.stringify(PRESETS.agencyCrunch.invoices)),
+          expenses: JSON.parse(JSON.stringify(PRESETS.agencyCrunch.expenses))
+        }
+      });
+
+      const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+      const [authMode, setAuthMode] = useState('login'); // 'login' | 'signup'
+      const [authFormData, setAuthFormData] = useState({
+        companyName: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+      });
+      const [authError, setAuthError] = useState('');
+      const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+
+      const resetSimulationSandboxes = () => {
+        setSimClientDelay(0);
+        setSimNewHireSalary(0);
+        setSimHireHeadcount(1);
+        setSimVendorDelayDays(0);
+        setSimRevenueShock(0);
+        setSimCapExDelay(false);
+        setAppliedActions({});
+        setNlpFeedback(null);
+        setNlpPrompt('');
+        setHoveredDayData(null);
+        setCounterOfferMode(false);
+        setLastAddedBillDay(null);
+        setHistoryStack([]);
+        setActiveTab('dashboard');
+      };
+
+      const generateFreshWorkspaceForCompany = () => {
+        return {
+          currentCash: 0,
+          invoices: [],
+          expenses: []
+        };
+      };
+
+      const handleAuthSubmit = (e) => {
+        e.preventDefault();
+        setAuthError('');
+
+        const email = authFormData.email.trim().toLowerCase();
+        const password = authFormData.password.trim();
+
+        if (!email || !password) {
+          setAuthError('Email and Password are required.');
+          return;
+        }
+
+        // Save current active workspace state before switching
+        if (currentUser?.id) {
+          setUserWorkspaces(prev => ({
+            ...prev,
+            [currentUser.id]: {
+              currentCash,
+              invoices: JSON.parse(JSON.stringify(invoices)),
+              expenses: JSON.parse(JSON.stringify(expenses))
+            }
+          }));
+        }
+
+        if (authMode === 'signup') {
+          const companyName = authFormData.companyName.trim();
+          if (!companyName) {
+            setAuthError('Company Name is required.');
+            return;
+          }
+          if (password.length < 6) {
+            setAuthError('Password must be at least 6 characters long.');
+            return;
+          }
+          if (authFormData.password !== authFormData.confirmPassword) {
+            setAuthError('Passwords do not match.');
+            return;
+          }
+
+          // Check if email already registered
+          const existing = registeredUsers.find(u => u.email === email);
+          if (existing) {
+            setAuthError('An account with this business email already exists.');
+            return;
+          }
+
+          const newUserId = `usr-${Date.now()}`;
+          const newUser = {
+            id: newUserId,
+            companyName,
+            email,
+            password,
+            role: 'Founder & Administrator'
+          };
+
+          // Generate completely clean workspace initialized strictly to 0
+          const freshData = generateFreshWorkspaceForCompany();
+
+          setUserWorkspaces(prev => ({
+            ...prev,
+            [newUserId]: freshData
+          }));
+
+          setRegisteredUsers(prev => [...prev, newUser]);
+          setCurrentUser(newUser);
+
+          // Refresh and set all live state variables to 0
+          setCurrentCash(0);
+          setInvoices([]);
+          setExpenses([]);
+          setSelectedPresetKey('empty');
+          resetSimulationSandboxes();
+
+          setIsAuthModalOpen(false);
+          setAuthFormData({ companyName: '', email: '', password: '', confirmPassword: '' });
+          showToast('New Account Created!', `Workspace refreshed to 0 for ${companyName}. Ready for your real data.`);
+        } else {
+          // Login Flow
+          const matchedUser = registeredUsers.find(u => u.email === email && u.password === password);
+          if (!matchedUser) {
+            setAuthError('Invalid email or password. You can also click "Use Demo Account".');
+            return;
+          }
+
+          setCurrentUser(matchedUser);
+
+          // Restore saved data for existing user, or start at 0 if no prior records
+          const savedData = userWorkspaces[matchedUser.id] || generateFreshWorkspaceForCompany();
+          setCurrentCash(savedData.currentCash);
+          setInvoices(JSON.parse(JSON.stringify(savedData.invoices)));
+          setExpenses(JSON.parse(JSON.stringify(savedData.expenses)));
+          setSelectedPresetKey(savedData.currentCash === 0 && savedData.invoices.length === 0 ? 'empty' : 'custom');
+          resetSimulationSandboxes();
+
+          setIsAuthModalOpen(false);
+          setAuthFormData({ companyName: '', email: '', password: '', confirmPassword: '' });
+          showToast('Logged In Successfully', `Workspace loaded for ${matchedUser.companyName}!`);
+        }
+      };
+
+      const handleQuickDemoLogin = () => {
+        // Save current active workspace before demo switch
+        if (currentUser?.id) {
+          setUserWorkspaces(prev => ({
+            ...prev,
+            [currentUser.id]: {
+              currentCash,
+              invoices: JSON.parse(JSON.stringify(invoices)),
+              expenses: JSON.parse(JSON.stringify(expenses))
+            }
+          }));
+        }
+
+        const demo = registeredUsers[0];
+        setCurrentUser(demo);
+
+        const demoData = userWorkspaces[demo.id] || {
+          currentCash: PRESETS.agencyCrunch.initialCash,
+          invoices: JSON.parse(JSON.stringify(PRESETS.agencyCrunch.invoices)),
+          expenses: JSON.parse(JSON.stringify(PRESETS.agencyCrunch.expenses))
+        };
+
+        setCurrentCash(demoData.currentCash);
+        setInvoices(JSON.parse(JSON.stringify(demoData.invoices)));
+        setExpenses(JSON.parse(JSON.stringify(demoData.expenses)));
+        resetSimulationSandboxes();
+
+        setIsAuthModalOpen(false);
+        setAuthError('');
+        showToast('Demo Account Active', `Workspace refreshed for ${demo.companyName}.`);
+      };
+
+      const handleUserLogout = () => {
+        if (currentUser?.id) {
+          setUserWorkspaces(prev => ({
+            ...prev,
+            [currentUser.id]: {
+              currentCash,
+              invoices: JSON.parse(JSON.stringify(invoices)),
+              expenses: JSON.parse(JSON.stringify(expenses))
+            }
+          }));
+        }
+
+        setCurrentUser(null);
+        setIsUserMenuOpen(false);
+        
+        // Reset all live financial metrics, receivables, and payables to 0 on logout
+        setCurrentCash(0);
+        setInvoices([]);
+        setExpenses([]);
+        setSelectedPresetKey('empty');
+        resetSimulationSandboxes();
+
+        showToast('Logged Out', 'Signed out. Workspace data cleared to 0.');
+      };
 
       const startCamera = async () => {
         try {
@@ -1327,7 +1573,8 @@
         negoTone,
         counterOfferMode,
         counterOfferUpfrontPct,
-        negotiationCalculations
+        negotiationCalculations,
+        currentUser
       ]);
 
       const handleCommitVendorNegotiationToForecast = () => {
@@ -1640,8 +1887,8 @@ payable,Digital Ad Retargeting,3500,28,low,Discretionary`;
         const minVal = Math.min(...allVals);
         const maxVal = Math.max(...allVals);
 
-        const yMin = Math.floor((minVal < 0 ? minVal * 1.2 : -5000) / 5000) * 5000;
-        const yMax = Math.ceil((maxVal * 1.15) / 5000) * 5000;
+        const yMin = Math.min(-5000, Math.floor((minVal < 0 ? minVal * 1.2 : -5000) / 5000) * 5000);
+        const yMax = Math.max(10000, Math.ceil((maxVal * 1.15) / 5000) * 5000);
         const yRange = yMax - yMin || 1;
 
         const getX = (day) => padding.left + (day / horizonDays) * chartW;
@@ -2078,13 +2325,24 @@ payable,Digital Ad Retargeting,3500,28,low,Discretionary`;
                     <h1 className={`text-sm sm:text-base font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
                       CashFlow <span className="text-amber-500">Copilot</span>
                     </h1>
-                    <span className={`text-[10px] font-semibold uppercase px-2 py-0.5 rounded-full border ${
-                      isDark
-                        ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-                        : 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                    }`}>
-                      Live Engine
-                    </span>
+                    {currentUser ? (
+                      <span className={`hidden sm:inline-flex items-center gap-1.5 text-[10px] font-semibold px-2 py-0.5 rounded-full border ${
+                        isDark
+                          ? 'bg-amber-400/10 text-amber-300 border-amber-400/30'
+                          : 'bg-amber-50 text-amber-900 border-amber-200'
+                      }`}>
+                        <Building className="w-3 h-3 text-amber-500" />
+                        <span className="truncate max-w-[130px] font-bold">{currentUser.companyName}</span>
+                      </span>
+                    ) : (
+                      <span className={`text-[10px] font-semibold uppercase px-2 py-0.5 rounded-full border ${
+                        isDark
+                          ? 'bg-slate-800 text-slate-400 border-slate-700'
+                          : 'bg-slate-100 text-slate-600 border-slate-300'
+                      }`}>
+                        Guest Mode
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
@@ -2164,6 +2422,7 @@ payable,Digital Ad Retargeting,3500,28,low,Discretionary`;
                       isDark ? 'text-slate-200' : 'text-slate-800'
                     }`}
                   >
+                    <option value="empty" className={isDark ? 'bg-slate-900' : 'bg-white'}>Fresh Workspace (0 Balance)</option>
                     <option value="agencyCrunch" className={isDark ? 'bg-slate-900' : 'bg-white'}>Tech Agency (Payroll Crunch)</option>
                     <option value="retailCrunch" className={isDark ? 'bg-slate-900' : 'bg-white'}>B2B Wholesale (EMI & GST Pinch)</option>
                     <option value="saasGrowth" className={isDark ? 'bg-slate-900' : 'bg-white'}>SaaS Studio (Healthy Cushion)</option>
@@ -2244,6 +2503,89 @@ payable,Digital Ad Retargeting,3500,28,low,Discretionary`;
                 >
                   {isDark ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
                 </button>
+
+                {}
+                {currentUser ? (
+                  <div className="relative">
+                    <button
+                      onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                      className={`flex items-center gap-2 pl-2 pr-2.5 py-1.5 rounded-lg border text-xs font-semibold transition-all ${
+                        isDark
+                          ? 'bg-slate-950/80 hover:bg-slate-900 border-slate-800 text-slate-200 hover:border-amber-400/50'
+                          : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-800 shadow-sm'
+                      }`}
+                      title="Company Account Menu"
+                    >
+                      <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-amber-400 to-emerald-500 text-slate-950 font-bold flex items-center justify-center text-[10px]">
+                        {currentUser.companyName.charAt(0).toUpperCase()}
+                      </div>
+                      <span className="hidden md:inline font-bold truncate max-w-[110px]">
+                        {currentUser.companyName.split(' ')[0]}
+                      </span>
+                      <ChevronRight className="w-3 h-3 text-slate-400" />
+                    </button>
+
+                    {isUserMenuOpen && (
+                      <div className={`absolute right-0 mt-2 w-64 rounded-xl border shadow-2xl p-3 z-50 transition-all ${
+                        isDark ? 'bg-slate-900 border-slate-800 text-slate-100 backdrop-blur-md' : 'bg-white border-slate-200 text-slate-900 shadow-xl'
+                      }`}>
+                        <div className="flex items-center gap-2.5 pb-2.5 mb-2.5 border-b border-slate-800/60">
+                          <div className="w-8 h-8 rounded-lg bg-amber-400/20 text-amber-400 border border-amber-400/30 flex items-center justify-center font-bold text-sm">
+                            <Building className="w-4 h-4 text-amber-500" />
+                          </div>
+                          <div className="overflow-hidden">
+                            <p className="font-bold text-xs truncate">{currentUser.companyName}</p>
+                            <p className="text-[10px] text-slate-400 truncate">{currentUser.email}</p>
+                          </div>
+                        </div>
+
+                        <div className="space-y-1 text-xs">
+                          <div className={`p-2 rounded-lg text-[11px] ${
+                            isDark ? 'bg-slate-950/80 text-emerald-400' : 'bg-emerald-50 text-emerald-800'
+                          }`}>
+                            <span className="font-semibold">Role: </span>{currentUser.role || 'Executive Administrator'}
+                          </div>
+
+                          <button
+                            onClick={handleUserLogout}
+                            className={`w-full p-2 rounded-lg text-left text-xs font-semibold flex items-center gap-2 transition-colors ${
+                              isDark ? 'hover:bg-rose-500/10 text-rose-400' : 'hover:bg-rose-50 text-rose-600'
+                            }`}
+                          >
+                            <LogOut className="w-3.5 h-3.5" />
+                            <span>Sign Out of Company</span>
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      onClick={() => {
+                        setAuthMode('login');
+                        setIsAuthModalOpen(true);
+                      }}
+                      className={`px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all flex items-center gap-1.5 ${
+                        isDark ? 'bg-slate-950/80 hover:bg-slate-900 border-slate-800 text-slate-300' : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-800 shadow-sm'
+                      }`}
+                    >
+                      <LogIn className="w-3.5 h-3.5 text-amber-500" />
+                      <span>Log In</span>
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        setAuthMode('signup');
+                        setIsAuthModalOpen(true);
+                      }}
+                      className="px-3 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold transition-all shadow-sm flex items-center gap-1.5"
+                    >
+                      <UserPlus className="w-3.5 h-3.5 fill-slate-950" />
+                      <span>Sign Up</span>
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </header>
@@ -4580,6 +4922,210 @@ payable,Digital Ad Retargeting,3500,28,low,Discretionary`;
                     </button>
                   </div>
                 </form>
+              </div>
+            </div>
+          )}
+
+          {}
+          {isAuthModalOpen && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+              <div className={`border rounded-2xl w-full max-w-md p-6 shadow-2xl space-y-5 transition-all ${
+                isDark ? 'bg-slate-900 border-amber-500/40 text-white' : 'bg-white border-amber-300 text-slate-900'
+              }`}>
+                {/* Header */}
+                <div className="flex items-center justify-between pb-3 border-b border-slate-800/80">
+                  <div className="flex items-center gap-2.5">
+                    <div className="p-2 rounded-xl bg-gradient-to-tr from-amber-400/20 to-emerald-500/20 border border-amber-400/30 text-amber-400">
+                      {authMode === 'signup' ? <UserPlus className="w-5 h-5 text-amber-400" /> : <Lock className="w-5 h-5 text-amber-400" />}
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-base">
+                        {authMode === 'signup' ? 'Create Business Account' : 'Company Login'}
+                      </h3>
+                      <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                        {authMode === 'signup' ? 'Access your dedicated treasury & runway workspace' : 'Welcome back to CashFlow Copilot'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      setIsAuthModalOpen(false);
+                      setAuthError('');
+                    }}
+                    className="text-slate-400 hover:text-white p-1 text-sm font-bold"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                {/* Tabs */}
+                <div className={`p-1 rounded-xl border flex items-center gap-1 ${
+                  isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-100 border-slate-200'
+                }`}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAuthMode('login');
+                      setAuthError('');
+                    }}
+                    className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                      authMode === 'login'
+                        ? 'bg-amber-400 text-slate-950 shadow-sm'
+                        : isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    Log In
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAuthMode('signup');
+                      setAuthError('');
+                    }}
+                    className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                      authMode === 'signup'
+                        ? 'bg-amber-400 text-slate-950 shadow-sm'
+                        : isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    Create Account
+                  </button>
+                </div>
+
+                {/* Error Banner */}
+                {authError && (
+                  <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 shrink-0 text-rose-500" />
+                    <span>{authError}</span>
+                  </div>
+                )}
+
+                {/* Form */}
+                <form onSubmit={handleAuthSubmit} className="space-y-3.5 text-xs">
+                  {authMode === 'signup' && (
+                    <div>
+                      <label className="font-semibold block mb-1">Company / Enterprise Name</label>
+                      <div className="relative">
+                        <input
+                          type="text"
+                          required
+                          placeholder="e.g. Nexus Technology Solutions Ltd"
+                          value={authFormData.companyName}
+                          onChange={(e) => setAuthFormData({ ...authFormData, companyName: e.target.value })}
+                          className={`w-full pl-9 pr-3 py-2.5 rounded-xl border focus:outline-none font-semibold ${
+                            isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-amber-400' : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-amber-500'
+                          }`}
+                        />
+                        <Building className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                      </div>
+                    </div>
+                  )}
+
+                  <div>
+                    <label className="font-semibold block mb-1">Business Email Address</label>
+                    <div className="relative">
+                      <input
+                        type="email"
+                        required
+                        placeholder="founder@yourcompany.com"
+                        value={authFormData.email}
+                        onChange={(e) => setAuthFormData({ ...authFormData, email: e.target.value })}
+                        className={`w-full pl-9 pr-3 py-2.5 rounded-xl border focus:outline-none ${
+                          isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-amber-400' : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-amber-500'
+                        }`}
+                      />
+                      <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="font-semibold block mb-1">Password</label>
+                    <div className="relative">
+                      <input
+                        type="password"
+                        required
+                        placeholder="••••••••"
+                        value={authFormData.password}
+                        onChange={(e) => setAuthFormData({ ...authFormData, password: e.target.value })}
+                        className={`w-full pl-9 pr-3 py-2.5 rounded-xl border focus:outline-none ${
+                          isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-amber-400' : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-amber-500'
+                        }`}
+                      />
+                      <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                    </div>
+                  </div>
+
+                  {authMode === 'signup' && (
+                    <div>
+                      <label className="font-semibold block mb-1">Confirm Password</label>
+                      <div className="relative">
+                        <input
+                          type="password"
+                          required
+                          placeholder="••••••••"
+                          value={authFormData.confirmPassword}
+                          onChange={(e) => setAuthFormData({ ...authFormData, confirmPassword: e.target.value })}
+                          className={`w-full pl-9 pr-3 py-2.5 rounded-xl border focus:outline-none ${
+                            isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-amber-400' : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-amber-500'
+                          }`}
+                        />
+                        <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="pt-2 space-y-2">
+                    <button
+                      type="submit"
+                      className="w-full py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs rounded-xl shadow-md transition-all active:scale-[0.98]"
+                    >
+                      {authMode === 'signup' ? 'Create Company Workspace' : 'Sign In to Workspace'}
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={handleQuickDemoLogin}
+                      className={`w-full py-2 rounded-xl text-xs font-bold border transition-all ${
+                        isDark ? 'bg-slate-950/80 hover:bg-slate-800 border-slate-800 text-amber-400' : 'bg-slate-100 hover:bg-slate-200 border-slate-300 text-amber-800'
+                      }`}
+                    >
+                      ⚡ 1-Click Demo Login (Apex Innovations)
+                    </button>
+                  </div>
+                </form>
+
+                <div className="text-center text-[11px] text-slate-400 pt-1 border-t border-slate-800/40">
+                  {authMode === 'signup' ? (
+                    <span>
+                      Already have an account?{' '}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setAuthMode('login');
+                          setAuthError('');
+                        }}
+                        className="text-amber-400 hover:underline font-bold"
+                      >
+                        Log in here
+                      </button>
+                    </span>
+                  ) : (
+                    <span>
+                      Need a dedicated company dashboard?{' '}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setAuthMode('signup');
+                          setAuthError('');
+                        }}
+                        className="text-amber-400 hover:underline font-bold"
+                      >
+                        Create an account
+                      </button>
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
           )}
